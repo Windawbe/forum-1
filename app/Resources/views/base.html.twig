@@ -44,7 +44,9 @@
                         {% if is_granted("ROLE_ADMIN") %}
                             <li><a href="{{ path('discutea_forum_admin_dashboard') }}">Gestion forum</a></li>
                         {% endif %}
-                        
+                        {% if is_granted("ROLE_SUPER_ADMIN") %}
+                            <li><a href="{{ path('discutea_forum_admin_superdashboard') }}">Administration</a></li>
+                        {% endif %}
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
