@@ -1,0 +1,15 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block fos_user_content %}
+<div class="form-group row col-xs-4 col-xs-offset-4">
+    <h1>Inscription terminée</h1>
+    <p>{{ 'registration.confirmed'|trans({'%username%': user.username}) }}</p>
+    {% if targetUrl %}
+    <p><a href="{{ targetUrl }}">{{ 'registration.back'|trans }}</a></p>
+    {% endif %}
+</div>
+{% endblock fos_user_content %}

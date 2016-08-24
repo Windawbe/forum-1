@@ -1,0 +1,42 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block body %}
+
+
+{% block fos_user_content %}
+{% trans_default_domain 'FOSUserBundle' %}
+
+<br />
+
+<form action="{{ path("fos_user_security_check") }}" method="post">
+    <div class="form-group">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+        <div class="row col-xs-4 col-xs-offset-4">
+             <h1>Connexion</h1>
+        </div>
+        <div class="form-group row col-xs-4 col-xs-offset-4">
+            <!--<label for="username">{{ "security.login.username"|trans }}</label> -->
+            <input class="form-control" placeholder="{{ "security.login.username"|trans }}" type="text" id="username" name="_username" value="{{ last_username }}" required="required" />
+        </div>
+        <div class="form-group row col-xs-4 col-xs-offset-4">
+            <!--<label for="password">{{ 'security.login.password'|trans }}</label> -->
+            <input class="form-control" placeholder="{{ 'security.login.password'|trans }}" type="password" id="password" name="_password" required="required" />
+        </div>
+        <div class="row col-xs-4 col-xs-offset-4">
+            <input class="checkbox" type="checkbox" id="remember_me" name="_remember_me" value="on" />
+            <label for="remember_me">{{ 'security.login.remember_me'|trans }}</label>
+        </div>
+            <div class="row col-xs-4 col-xs-offset-4">
+            <input class="btn btn-default" type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}" />
+        </div>
+        {% if error %}
+        <div class="row col-xs-4 col-xs-offset-4" style="color : red;">
+            <div class="danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        </div>
+        {% endif %}
+    </div>
+</form>
+{% endblock fos_user_content %}
+{% endblock body %}
