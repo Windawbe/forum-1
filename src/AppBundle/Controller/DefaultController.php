@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class DefaultController extends Controller
 {
@@ -18,5 +19,22 @@ class DefaultController extends Controller
         return $this->render('default/index.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
         ]);
+    }
+    
+    /**
+     * 
+     * Administration
+     * 
+     * @Route("/admin/role/", name="discutea_forum_admin_superdashboard")
+     * @Security("is_granted('ROLE_SUPER_ADMIN')")
+     * 
+     */
+    public function changeRoleAction()
+    {       
+        //$em = $this->getDoctrine()->getManager();
+        
+        //$Form = $this->createForm(UserType::class, $user)
+        
+        return $this->render('DForumBundle::changeRole.html.twig');
     }
 }
