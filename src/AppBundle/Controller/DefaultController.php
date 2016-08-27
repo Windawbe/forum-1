@@ -7,6 +7,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use AppBundle\Entity\User;
+use AppBundle\Form\UserType;
+
+
 class DefaultController extends Controller
 {
     /**
@@ -21,7 +28,7 @@ class DefaultController extends Controller
         ]);
     }
     
-    /**
+     /**
      * 
      * Administration
      * 
@@ -29,12 +36,11 @@ class DefaultController extends Controller
      * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * 
      */
-    public function changeRoleAction()
-    {       
-        //$em = $this->getDoctrine()->getManager();
-        
-        //$Form = $this->createForm(UserType::class, $user)
-        
-        return $this->render('DForumBundle::changeRole.html.twig');
+    public function listUserAction()
+    {
+        $userManager = $this->get('fos_user.user_manager');
+        $users = $userManager->findUsers();
+
+        return $this->render('AppBundle::listUser.html.twig', array('users' =>   $users));
     }
 }

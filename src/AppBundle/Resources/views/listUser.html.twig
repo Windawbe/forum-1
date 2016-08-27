@@ -1,0 +1,33 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% block title %}Administration des rôles{% endblock %}
+
+{% block body %}
+<div class="form-group row col-xs-4 col-xs-offset-4">
+    <h1>Administration</h1>
+</div>
+
+<div class="form-group row col-xs-4 col-xs-offset-4">
+    <h3>Tous les utilisateurs</h3>
+</div>
+    <table class="table table-responsive" style="border: 1px solid black;">
+        <tr>
+            <th>ID</th>
+            <th>Utilisateur</th>
+            <th>Email</th>
+            <th>Dernière Visite</th>
+            <th></th>
+        </tr>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.id|e }}</td>
+            <td>{{ user.username|e }}</td>
+            <td>{{ user.email|e }}</td>
+            <td>{{ user.lastLogin|date('d/m/Y') }}</td>
+            <td></td> 
+        </tr>
+        {% endfor %}
+    </table>
+
+
+{% endblock body %}
