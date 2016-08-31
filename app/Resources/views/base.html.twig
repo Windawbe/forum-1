@@ -10,10 +10,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
         <title>{{ pagetitle }}</title>
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+        <!-- FONT AWESOME -->
+        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/bmatznerfontawesome/css/font-awesome.min.css') }}" />
         <style>
             body {
-                padding-top: 50px;
-                
+                padding-top: 50px;  
             }
             .starter-template {
                 padding: 40px 15px;
@@ -23,7 +24,7 @@
             }
         </style>
         {% block stylesheets %}
-              
+
         {% endblock %}
     </head>
     <body>
@@ -40,6 +41,7 @@
                 </div>
                 <div id="navbar" class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
+                        <!-- fa fa-home-->
                         <li><a href="{{ path('discutea_forum_homepage') }}"><div class="glyphicon glyphicon-home"></div></a></li>
                         {% if is_granted("ROLE_ADMIN") %}
                             <li><a href="{{ path('discutea_forum_admin_dashboard') }}">Gestion forum</a></li>
@@ -50,9 +52,9 @@
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                        <li><a href="{{ path('fos_user_profile_show') }}">Bienvenue {{ app.user.username }}</a></li>
+                        <li><a href="{{ path('fos_user_user_show', {'id' : app.user.id}) }}">Bienvenue {{ app.user.username }}</a></li>
                         <li><a href="{{ path('fos_user_security_logout') }}">Déconnexion</a></li>
-                        <li><a href="{{ path('fos_user_profile_edit') }}">Mon compte</a></li>
+                        <li><a href="{{ path('app_bundle_edituser', {'id' : app.user.id}) }}">Mon compte</a></li>
                         {% else %}
                         <li><a href="{{ path('fos_user_registration_register') }}">Inscription</a></li>
                         <li><a href="{{ path('fos_user_security_login') }}">Connexion</a></li>

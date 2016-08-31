@@ -4,12 +4,13 @@
 
 <div class="form-group">
     <div class="form-group row col-xs-4 col-xs-offset-4">
-        <h1>Profil de {{ user.username }}</h1>
+        <h1>Profil de {{ user.username|default('undefined') }}</h1>
     </div>
 
     <div class="form-group row col-xs-4 col-xs-offset-4 fos_user_user_show">
-        <p>{{ 'profile.show.username'|trans }}: {{ user.username }}</p>
-        <p>{{ 'profile.show.email'|trans }}: {{ user.email }}</p>
-        <p>Dernière visite : {{ user.lastLogin|date('d-m-Y') }}</p>
+        <p>{{ 'profile.show.username'|trans }}: {{ user.username|default('undefined') }}</p>
+        <p>{{ 'profile.show.email'|trans }}: {{ user.email|default('undefined') }}</p>
+        <!--<p>Dernière visite : {{ user.lastLogin|date('d-m-Y')|default('undefined') }}</p> -->
+
     </div>
 </div>

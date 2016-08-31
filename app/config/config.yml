@@ -73,6 +73,9 @@ fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
     user_class: AppBundle\Entity\User
+    profile:
+       form:
+          type: AppBundle\Form\ProfileType
     
 knp_paginator:
     page_range: 3
