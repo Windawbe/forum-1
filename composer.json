@@ -30,7 +30,8 @@
         "discutea/forum-bundle": "^1.0",
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "symfony/assetic-bundle": "^2.8",
-        "bmatzner/fontawesome-bundle": "~4.3"
+        "bmatzner/fontawesome-bundle": "~4.3",
+        "helios-ag/fm-bbcode-bundle": "^7.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

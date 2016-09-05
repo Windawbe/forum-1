@@ -114,3 +114,11 @@ assetic:
     bundles:        [DForumBundle]
     filters:
         cssrewrite: ~
+        
+fm_bbcode:
+   filter_sets:
+      my_default_filter:
+         locale: ru
+         xhtml: true
+         filters: [ default, quote ]
+         whitelist: [ b, block, code, email, image, list, quote, text, url, video ]

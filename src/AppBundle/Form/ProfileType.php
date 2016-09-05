@@ -5,11 +5,24 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
+use FOS\UserBundle\Util\LegacyFormHelper;
 
 class ProfileType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
-    {
+    {        
+        $builder
+            ->add('roles', ChoiceType::class, array('label' => 'Attribution des droits :',
+                "expanded" => true,
+                "multiple" => true,
+                'choices' => array(
+                    'Admin' => 'ROLE_ADMIN', 
+                    'Super Admin' => 'ROLE_SUPER_ADMIN'),
+                ));
+        
+        $builder->remove('current_password', 'password');
+        /*
         $builder->add('roles', ChoiceType::class, array(
             'choices'  => array(
                 'Modérateur' => 'ROLE_MODERATOR', 
@@ -20,6 +33,7 @@ class ProfileType extends AbstractType
         ));
         
         $builder->remove('current_password', 'password');
+        */
     }
     
     public function getParent()

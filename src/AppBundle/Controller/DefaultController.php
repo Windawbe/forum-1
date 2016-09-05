@@ -13,6 +13,12 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use AppBundle\Entity\User;
 use AppBundle\Form\UserType;
 
+use FOS\UserBundle\FOSUserEvents;
+use FOS\UserBundle\Event\FormEvent;
+use FOS\UserBundle\Event\FilterUserResponseEvent;
+use FOS\UserBundle\Event\GetResponseUserEvent;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
 class DefaultController extends Controller
 {
     /**
@@ -45,7 +51,7 @@ class DefaultController extends Controller
     
     /** 
     * 
-    * @Route("/edit/{id}", name="app_bundle_edituser")
+    * @Route("/profile/edit/{id}", name="app_bundle_edituser")
     * @Security("is_granted('ROLE_SUPER_ADMIN')")
     * 
     */
@@ -58,6 +64,10 @@ class DefaultController extends Controller
 
         if (!is_object($user)) {
             throw new AccessDeniedException('This user does not have access to this section.');
+        }
+        $event = new GetResponseUserEvent($user, $request);
+        if (null !== $event->getResponse()) {
+            return $event->getResponse();
         }
 
         /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */
@@ -72,14 +82,22 @@ class DefaultController extends Controller
             $userManager = $this->get('fos_user.user_manager');
             $userManager->updateUser($user);
 
-            $session = $this->getRequest()->getSession();
-            $session->getFlashBag()->add('message', 'Successfully updated');
-            $url = $this->generateUrl('matrix_edi_viewUser');
-            $response = new RedirectResponse($url);
+            //$session = $this->getRequest()->getSession();
+            //$session->getFlashBag()->add('message', 'Successfully updated');
+            //$url = $this->generateUrl('matrix_edi_viewUser');
+            if (null === $response = $event->getResponse()) {
+                $url = $this->generateUrl('fos_user_user_show', array('id' => $id));
+                $response = new RedirectResponse($url);
+            }
+            
+            //$response = new RedirectResponse($url);
+            return $response;
         }
+        
+        //return $this->render('FOSUserBundle:Profile:edit/'.$id.'.html.twig', array('form' => $form->createView()));
 
         return $this->render('FOSUserBundle:Profile:edit.html.twig', array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ));
     }
     
