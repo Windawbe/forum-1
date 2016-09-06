@@ -12,6 +12,7 @@ class ProfileType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {        
+       
         $builder
             ->add('roles', ChoiceType::class, array('label' => 'Attribution des droits :',
                 "expanded" => true,
@@ -40,7 +41,7 @@ class ProfileType extends AbstractType
     {
         return 'FOS\UserBundle\Form\Type\ProfileFormType';
     }
-
+/*
     public function getBlockPrefix()
     {
         return 'app_user_profile';
@@ -51,4 +52,5 @@ class ProfileType extends AbstractType
     {
         return $this->getBlockPrefix();
     }
+    */
 }

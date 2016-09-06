@@ -11,7 +11,7 @@
         <br /><br />
       </div>
               
-        <div class="raw">{{ postpreview.content }}</div>
+        <div class="raw">{{ postpreview.content|bbcode_filter('my_default_filter') }}</div>
 
     </div>
   </div>

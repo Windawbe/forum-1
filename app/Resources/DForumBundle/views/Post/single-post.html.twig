@@ -22,7 +22,7 @@
         <br /><br />
       </div>
               
-        <div id="content{{ post.id }}" class="raw">{{ post.content }}</div>
+        <div id="content{{ post.id }}" class="raw">{{ post.content|bbcode_filter('my_default_filter') }}</div>
       {% if app.user and posts is defined %}
         <ul class="pull-right list-inline">
           <li><a href="{{ path(posts.route, {'slug': posts.params.slug, 'p': posts.pageCount, 'quote': post.id}) }}#discutea_forum_post"><i class="glyphicon glyphicon-tint"></i> {{ 'discutea.forum.quote'|trans }}</a></li>

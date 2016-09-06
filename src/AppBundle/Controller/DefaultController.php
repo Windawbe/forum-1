@@ -18,6 +18,7 @@ use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class DefaultController extends Controller
 {
@@ -52,17 +53,18 @@ class DefaultController extends Controller
     /** 
     * 
     * @Route("/profile/edit/{id}", name="app_bundle_edituser")
-    * @Security("is_granted('ROLE_SUPER_ADMIN')")
+    * 
     * 
     */
     public function editAction(Request $request, $id)
     {
+        $userConnected = $this->getUser();
         $userManager = $this->get('fos_user.user_manager');
         $user = $userManager->findUserBy(array('id' => $id));
 
         //$user = $em->getRepository('AppBundle:User')->find($id);
 
-        if (!is_object($user)) {
+        if (!is_object($user) || $userConnected->getId() != $id && !$userConnected->hasRole('ROLE_SUPER_ADMIN')) {
             throw new AccessDeniedException('This user does not have access to this section.');
         }
         $event = new GetResponseUserEvent($user, $request);
@@ -70,27 +72,25 @@ class DefaultController extends Controller
             return $event->getResponse();
         }
 
-        /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */
         $formFactory = $this->get('fos_user.profile.form.factory');
 
         $form = $formFactory->createForm();
+        // si l'utilisateur n'est pas le super admin, on supprime les droits dans le formulaire
+        if (!$userConnected->hasRole('ROLE_SUPER_ADMIN')){
+            $form->remove('roles');
+        }
         $form->setData($user);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
-            $userManager = $this->get('fos_user.user_manager');
+            //$userManager = $this->get('fos_user.user_manager');
             $userManager->updateUser($user);
 
-            //$session = $this->getRequest()->getSession();
-            //$session->getFlashBag()->add('message', 'Successfully updated');
-            //$url = $this->generateUrl('matrix_edi_viewUser');
             if (null === $response = $event->getResponse()) {
                 $url = $this->generateUrl('fos_user_user_show', array('id' => $id));
                 $response = new RedirectResponse($url);
             }
             
-            //$response = new RedirectResponse($url);
             return $response;
         }
         
@@ -118,5 +118,71 @@ class DefaultController extends Controller
         return $this->render('FOSUserBundle:Profile:show.html.twig', array(
             'user' => $user
         ));
+    }
+    
+    /**
+     * 
+     * @Route("/profile/password/{id}", name="fos_user_user_password")
+     * 
+     */
+    public function changePasswordAction(Request $request, $id)
+    {
+        //$user = $this->getUser();
+        $userManager = $this->get('fos_user.user_manager');
+        $user = $userManager->findUserBy(array('id' => $id));
+        
+        if (!is_object($user)) {
+            throw new AccessDeniedException('This user does not have access to this section.');
+        }
+
+        $event = new GetResponseUserEvent($user, $request);
+
+        if (null !== $event->getResponse()) {
+            return $event->getResponse();
+        }
+
+        /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */
+        $formFactory = $this->get('fos_user.change_password.form.factory');
+
+        $form = $formFactory->createForm();
+        $form->setData($user);
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
+            $userManager = $this->get('fos_user.user_manager');
+
+            $event = new FormEvent($form, $request);
+
+            $userManager->updateUser($user);
+
+            if (null === $response = $event->getResponse()) {
+                $url = $this->generateUrl('fos_user_user_show', array('id' => $id));
+                $response = new RedirectResponse($url);
+            }
+
+            return $response;
+        }
+
+        return $this->render('FOSUserBundle:ChangePassword:changePassword.html.twig', array(
+            'form' => $form->createView()
+        ));
+    }
+    
+    /**
+     * 
+     * Administration
+     * 
+     * @Route("/admin/role/", name="app_bundle_remove_user")
+     * @Security("is_granted('ROLE_SUPER_ADMIN')")
+     * 
+     */
+    public function RemoveUserAction()
+    {
+        $userManager = $this->get('fos_user.user_manager');
+        $users = $userManager->findUsers();
+
+        return $this->render('AppBundle::listUser.html.twig', array('users' =>   $users));
     }
 }

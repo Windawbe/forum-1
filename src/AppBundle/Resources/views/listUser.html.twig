@@ -3,21 +3,21 @@
 {% block title %}Administration des rôles{% endblock %}
 
 {% block body %}
-<div class="form-group row col-xs-4 col-xs-offset-4">
+<div class="row" style="text-align:center;">
     <h1>Administration</h1>
 </div>
 
-<div class="form-group row col-xs-4 col-xs-offset-4">
-    <h3>Tous les utilisateurs</h3>
+<div class="row" style="margin-left:10px;">
+    <h3>Liste de tous les utilisateurs</h3>
 </div>
 <table class="table table-responsive" style="border: 1px solid black;">
-    <tr>
+    <tr style="background-color:#486aad; color:white;">
         <th style="text-align:center;">ID</th>
         <th style="text-align:center;">Utilisateur</th>
         <th style="text-align:center;">Email</th>
         <th style="text-align:center;">Dernière Visite</th>
         <th style="text-align:center;">Droit</th>
-        <th style="text-align:center;"></th>
+        <th style="text-align:center;">Action</th>
     </tr>
     {% for user in users %}
     <tr>
@@ -26,7 +26,10 @@
         <td style="text-align:center;">{{ user.email|e }}</td>
         <td style="text-align:center;">{{ user.lastLogin|date('d/m/Y') }}</td>
         <td style="text-align:center;">{% for role in user.roles %}*{{ role }}{% endfor %}</td>
-        <td style="text-align:center;"><a href="{{ path('app_bundle_edituser',{ id: user.id }) }}">Modifier</a></td> 
+        <td style="text-align:center;">
+            <a href="{{ path('fos_user_user_show',{ id: user.id }) }}" style="margin-right:5px;" >Profil</a>
+            <a href="{{ path('app_bundle_edituser',{ id: user.id }) }}" style="margin-left:5px;">Modifier</a> 
+        </td>
     </tr>
     {% endfor %}
 </table>
