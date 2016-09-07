@@ -38,7 +38,7 @@ class DefaultController extends Controller
      * 
      * Administration
      * 
-     * @Route("/admin/role/", name="discutea_forum_admin_superdashboard")
+     * @Route("/forum/admin/lstuser/", name="discutea_forum_admin_superdashboard")
      * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * 
      */
@@ -52,7 +52,7 @@ class DefaultController extends Controller
     
     /** 
     * 
-    * @Route("/profile/edit/{id}", name="app_bundle_edituser")
+    * @Route("/forum/profile/edit/{id}", name="app_bundle_edituser")
     * 
     * 
     */
@@ -75,8 +75,8 @@ class DefaultController extends Controller
         $formFactory = $this->get('fos_user.profile.form.factory');
 
         $form = $formFactory->createForm();
-        // si l'utilisateur n'est pas le super admin, on supprime les droits dans le formulaire
-        if (!$userConnected->hasRole('ROLE_SUPER_ADMIN')){
+        // si l'utilisateur n'a pas les droits super admin, on supprime le champs droit dans le formulaire
+        if (!$userConnected->hasRole('ROLE_SUPER_ADMIN') || $userConnected->hasRole('ROLE_SUPER_ADMIN') &&  $userConnected->getId() == $id){
             $form->remove('roles');
         }
         $form->setData($user);
@@ -98,12 +98,13 @@ class DefaultController extends Controller
 
         return $this->render('FOSUserBundle:Profile:edit.html.twig', array(
             'form' => $form->createView(),
+            'id' => $id,
         ));
     }
     
     /**
      * 
-     * @Route("/profile/{id}", name="fos_user_user_show")
+     * @Route("/forum/profile/{id}", name="fos_user_user_show")
      * 
      */
     public function showAction($id)
@@ -122,7 +123,7 @@ class DefaultController extends Controller
     
     /**
      * 
-     * @Route("/profile/password/{id}", name="fos_user_user_password")
+     * @Route("/forum/profile/password/{id}", name="fos_user_user_password")
      * 
      */
     public function changePasswordAction(Request $request, $id)
@@ -174,7 +175,7 @@ class DefaultController extends Controller
      * 
      * Administration
      * 
-     * @Route("/admin/role/", name="app_bundle_remove_user")
+     * @Route("/forum/admin/role/", name="app_bundle_remove_user")
      * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * 
      */

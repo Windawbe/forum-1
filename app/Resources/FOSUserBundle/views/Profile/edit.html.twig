@@ -1,12 +1,10 @@
 {% extends "FOSUserBundle::layout.html.twig" %}
 
-{% block title %}Mon compte{% endblock %}
+{% block title %}Editer{% endblock %}
 
 {% block body %}
-
 {% block fos_user_content %}
 {% include "FOSUserBundle:Profile:edit_content.html.twig" %}
 {% include "FOSUserBundle:ChangePassword:changePassword_content.html.twig" %}
 {% endblock fos_user_content %}
-
 {% endblock body %}

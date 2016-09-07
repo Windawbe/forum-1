@@ -1,4 +1,4 @@
-{% extends "FOSUserBundle::layout.html.twig" %}
+{% extends "base.html.twig" %}
 
 {% block title %}Administration des rôles{% endblock %}
 
@@ -25,7 +25,17 @@
         <td style="text-align:center;">{{ user.username|e }}</td>
         <td style="text-align:center;">{{ user.email|e }}</td>
         <td style="text-align:center;">{{ user.lastLogin|date('d/m/Y') }}</td>
-        <td style="text-align:center;">{% for role in user.roles %}*{{ role }}{% endfor %}</td>
+        <td style="text-align:center;">
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                    Droit
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                    {% for role in user.roles %}<li role="presentation"><a role="menuitem" tabindex="-1" href="#">{{ role }}</a></li>{% endfor %}
+                </ul>
+            </div>
+        </td>
         <td style="text-align:center;">
             <a href="{{ path('fos_user_user_show',{ id: user.id }) }}" style="margin-right:5px;" >Profil</a>
             <a href="{{ path('app_bundle_edituser',{ id: user.id }) }}" style="margin-left:5px;">Modifier</a> 

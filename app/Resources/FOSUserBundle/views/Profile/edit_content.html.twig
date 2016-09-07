@@ -5,7 +5,7 @@
 
 <div class="form-group row col-xs-4 col-xs-offset-4 thumbnail forum-box color-dark" style="padding:10px; margin-bottom:0px; background-color:#486aad; color:white;">
     <h3>Modification pseudo/email</h3>
-    {{ form_start(form, { 'action': path('app_bundle_edituser', {'id' : app.user.id}), 'attr': { 'class': 'app_bundle_edituser' } }) }}
+    {{ form_start(form, { 'action': path('app_bundle_edituser', {'id' : id }), 'attr': { 'class': 'app_bundle_edituser' } }) }}
     {{ form_widget(form) }}
     <div>
         <input class="btn btn-default" type="submit" value="{{ 'profile.edit.submit'|trans }}" />
