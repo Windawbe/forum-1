@@ -1,5 +1,6 @@
 {% trans_default_domain 'FOSUserBundle' %}
 {% form_theme form 'bootstrap_3_layout.html.twig' %}
+{% form_theme formPassword 'bootstrap_3_layout.html.twig' %}
 
 <br />
 
@@ -11,4 +12,15 @@
         <input class="btn btn-default" type="submit" value="{{ 'profile.edit.submit'|trans }}" />
     </div>
     {{ form_end(form) }}
+</div>
+
+<div class="row col-xs-4 col-xs-offset-4 thumbnail forum-box color-dark" style="padding:10px; margin-bottom:0px; background-color:#486aad; color:white;">
+    {% if path('fos_user_change_password') %} <h3>Modification mot de passe</h3>{% endif %}
+
+    {{ form_start(formPassword, { 'action': path('app_bundle_edituser', {'id' : id}), 'attr': { 'class': 'app_bundle_edituser' } }) }}
+    {{ form_widget(formPassword) }}
+    <div>
+        <input class="btn btn-default" type="submit" value="{{ 'change_password.submit'|trans }}" />
+    </div>
+    {{ form_end(formPassword) }}
 </div>

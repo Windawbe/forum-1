@@ -72,6 +72,7 @@ class DefaultController extends Controller
             return $event->getResponse();
         }
 
+        // Formulaire du profil
         $formFactory = $this->get('fos_user.profile.form.factory');
 
         $form = $formFactory->createForm();
@@ -94,11 +95,35 @@ class DefaultController extends Controller
             return $response;
         }
         
-        //return $this->render('FOSUserBundle:Profile:edit/'.$id.'.html.twig', array('form' => $form->createView()));
+        // Formulaire du changement de mot de passe
+        $formFactory = $this->get('fos_user.change_password.form.factory');
+
+        $formPassword = $formFactory->createForm();
+        $formPassword->setData($user);
+
+        $formPassword->handleRequest($request);
+
+        if ($formPassword->isValid()) {
+            /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
+            $userManager = $this->get('fos_user.user_manager');
+
+            $event = new FormEvent($formPassword, $request);
+
+            $userManager->updateUser($user);
+
+            if (null === $response = $event->getResponse()) {
+                $url = $this->generateUrl('fos_user_user_show', array('id' => $id));
+                $response = new RedirectResponse($url);
+            }
+
+            return $response;
+        }
+        
 
         return $this->render('FOSUserBundle:Profile:edit.html.twig', array(
             'form' => $form->createView(),
             'id' => $id,
+            'formPassword' => $formPassword->createView(),
         ));
     }
     
@@ -121,69 +146,28 @@ class DefaultController extends Controller
         ));
     }
     
-    /**
-     * 
-     * @Route("/forum/profile/password/{id}", name="fos_user_user_password")
-     * 
-     */
-    public function changePasswordAction(Request $request, $id)
-    {
-        //$user = $this->getUser();
-        $userManager = $this->get('fos_user.user_manager');
-        $user = $userManager->findUserBy(array('id' => $id));
-        
-        if (!is_object($user)) {
-            throw new AccessDeniedException('This user does not have access to this section.');
-        }
-
-        $event = new GetResponseUserEvent($user, $request);
-
-        if (null !== $event->getResponse()) {
-            return $event->getResponse();
-        }
-
-        /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */
-        $formFactory = $this->get('fos_user.change_password.form.factory');
-
-        $form = $formFactory->createForm();
-        $form->setData($user);
-
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
-            $userManager = $this->get('fos_user.user_manager');
-
-            $event = new FormEvent($form, $request);
-
-            $userManager->updateUser($user);
-
-            if (null === $response = $event->getResponse()) {
-                $url = $this->generateUrl('fos_user_user_show', array('id' => $id));
-                $response = new RedirectResponse($url);
-            }
-
-            return $response;
-        }
-
-        return $this->render('FOSUserBundle:ChangePassword:changePassword.html.twig', array(
-            'form' => $form->createView()
-        ));
-    }
+   
     
     /**
      * 
      * Administration
      * 
-     * @Route("/forum/admin/role/", name="app_bundle_remove_user")
+     * @Route("/forum/admin/delete/{id}", name="app_bundle_remove_user")
      * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * 
      */
-    public function RemoveUserAction()
+    public function RemoveUserAction(Request $request, $id)
     {
         $userManager = $this->get('fos_user.user_manager');
-        $users = $userManager->findUsers();
+        $user = $userManager->findUserBy(array('id' => $id));
+        if(!$user->hasRole('ROLE_SUPER_ADMIN')){
+            $userManager->deleteUser($user);
+        }
+        else{
+            throw new AccessDeniedException('Cet utilisateur ne peut pas être supprimé');
+        }
 
-        return $this->render('AppBundle::listUser.html.twig', array('users' =>   $users));
+        return $this->redirectToRoute('discutea_forum_admin_superdashboard', array(), 301);
+        //return $this->render('AppBundle::listUser.html.twig');
     }
 }

@@ -37,8 +37,9 @@
             </div>
         </td>
         <td style="text-align:center;">
-            <a href="{{ path('fos_user_user_show',{ id: user.id }) }}" style="margin-right:5px;" >Profil</a>
-            <a href="{{ path('app_bundle_edituser',{ id: user.id }) }}" style="margin-left:5px;">Modifier</a> 
+            <a href="{{ path('fos_user_user_show',{ id: user.id }) }}" style="margin-right:5px;" ><i class="fa fa-2x fa-user" aria-hidden="true"></i></a>
+            <a href="{{ path('app_bundle_edituser',{ id: user.id }) }}" style="margin-left:5px; color:grey;"><i class="fa fa-2x fa-cog  fa-spin-hover" aria-hidden="true"></i></a> 
+            <a href="{{ path('app_bundle_remove_user',{ id: user.id }) }}" style="margin-left:5px; color:red;"><i class="fa fa-2x fa-times" aria-hidden="true"></i></a> 
         </td>
     </tr>
     {% endfor %}
